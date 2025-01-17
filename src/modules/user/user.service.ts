@@ -11,7 +11,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { name, password, email, phone } = createUserDto;
+    const { name, password, email, phone, role } = createUserDto;
 
     // Kiểm tra email không bị trùng
     const existingUser = await this.userModel.findOne({ email }).exec();
@@ -27,6 +27,7 @@ export class UserService {
       email,
       phone,
       password: hashedPassword,
+      role,
     });
     return newUser.save();
   }

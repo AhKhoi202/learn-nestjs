@@ -16,6 +16,9 @@ export class User {
 
   @Prop()
   phone: string;
+
+  @Prop({ default: 'user' }) // Mặc định role là 'user'
+  role: string;
   
 }
 

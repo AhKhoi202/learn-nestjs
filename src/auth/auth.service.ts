@@ -25,6 +25,7 @@ export class AuthService {
   async login(body: ILoginDTO) {
     // Tìm người dùng theo email
     const user = await this.usersService.findOne(body.email);
+    
 
     if (!user) {
       throw new UnauthorizedException('User is not registered');
@@ -36,8 +37,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { email: body.email };
-    console.log(payload);
+    const payload = {
+      username: user.name,
+      email: user.email,
+      role: user.role,
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

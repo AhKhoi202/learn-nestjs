@@ -4,6 +4,8 @@ import {
   IsNotEmpty,
   MinLength,
   Matches,
+  IsEnum,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -32,4 +34,8 @@ export class CreateUserDto {
     message: 'Phone number must have 10 digits and start with 09, 03, or 08',
   })
   phone: string;
+
+  @IsOptional()
+  @IsEnum(['admin', 'user'], { message: 'Role must be admin or user' })
+  role: string;
 }
