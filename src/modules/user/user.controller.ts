@@ -4,6 +4,8 @@ import {
   Get,
   Param,
   Post,
+  Req,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -32,10 +34,30 @@ export class UserController {
   async listUsers(): Promise<User[]> {
     return this.usersService.listUsers();
   }
+  //cái này phải ở trướcc @Get(':email')
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  async getUserProfile(@Req() req) {
+    console.log('User from req.user:', req.user); // Kiểm tra req.user
+    const email = req.user.email; // Lấy email từ payload trong token
+    return this.usersService.getProfile(email);
+  }
 
+  //cái này phải ở sau  @Get('profile')
   @UseGuards(JwtAuthGuard)
   @Get(':email') //test http://localhost:8080/api/v1/user/email
   async getProfile(@Param('email') email: string): Promise<User | null> {
+    return this.usersService.getProfile(email);
+  }
+}
+
+@Controller('me')
+export class MeController {
+  constructor(private readonly usersService: UserService) {}
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  async getUserProfile(@Req() req) {
+    const email = req.user.email;
     return this.usersService.getProfile(email);
   }
 }
